@@ -1,0 +1,65 @@
+---
+import { tagSlug } from '../lib/tags';
+import { publishedPosts } from '../lib/posts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { withBase } from '../lib/paths';
+
+const posts = await publishedPosts();
+
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+---
+
+<BaseLayout title="Archive" description="Every Stillharbor journal entry, newest first.">
+	<section class="hero">
+		<h1 class="page-title">Archive</h1>
+		<p class="lede">Every entry, from the most recent back to the beginning.</p>
+		{
+			tags.length > 0 && (
+				<ul class="tags">
+					{tags.map((tag) => (
+						<li>
+							<a class="tag" href={withBase(`tags/${tagSlug(tag)}/`)}>
+								{tag}
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</section>
+
+	<div class="search-box" hidden id="archive-search">
+		<label for="search">Search entries</label>
+		<input id="search" type="search" placeholder="Search words, titles, or tags…" autocomplete="off" />
+		<p id="search-status" role="status" aria-live="polite"></p>
+	</div>
+	{posts.length === 0 && <p class="empty">No entries yet. Check back soon.</p>}
+	<p id="no-results" class="empty" hidden>No entries match your search. Try another word.</p>
+	<section class="entry-list" aria-label="All entries">
+		{posts.map((post) => <PostCard post={post} />)}
+	</section>
+</BaseLayout>
+
+<script>
+ const box = document.querySelector<HTMLElement>('#archive-search');
+ const input = document.querySelector<HTMLInputElement>('#search');
+ const cards = [...document.querySelectorAll<HTMLElement>('.card')];
+ const status = document.querySelector<HTMLElement>('#search-status');
+ const empty = document.querySelector<HTMLElement>('#no-results');
+ if (box && input && status && empty) {
+   box.hidden = false;
+   const update = () => {
+     const query = input.value.trim().toLowerCase();
+     let count = 0;
+     cards.forEach((card) => {
+       card.hidden = !card.dataset.search?.includes(query);
+       if (!card.hidden) count++;
+     });
+     status.textContent = `${count} ${count === 1 ? 'entry' : 'entries'}`;
+     empty.hidden = count > 0 || cards.length === 0;
+   };
+   input.addEventListener('input', update);
+   update();
+ }
+</script>

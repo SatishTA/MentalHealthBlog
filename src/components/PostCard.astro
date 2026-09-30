@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/dates';
+import { mediaSrc, withBase } from '../lib/paths';
+
+interface Props {
+	post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const href = withBase(`posts/${post.id}/`);
+const cover = mediaSrc(post.data.cover ?? post.data.photos[0]);
+---
+
+<a class:list={["card", { "card-text-only": !cover }]} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(" ")} ${post.body ?? ""}`.toLowerCase()} href={href}>
+	<div>
+		<p class="card-meta">
+			<time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+		</p>
+		<h2 class="card-title">{post.data.title}</h2>
+		<p>{post.data.description}</p>
+		{
+			post.data.tags.length > 0 && (
+				<ul class="tags">
+					{post.data.tags.map((tag) => (
+						<li>
+							<span class="tag">{tag}</span>
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</div>
+	{
+		cover && (
+			<div class="card-cover">
+				<img src={cover} alt="" loading="lazy" decoding="async" />
+			</div>
+		)
+	}
+</a>

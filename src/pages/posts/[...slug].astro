@@ -1,0 +1,72 @@
+---
+import { tagSlug } from '../../lib/tags';
+import { render } from 'astro:content';
+import { publishedPosts } from '../../lib/posts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/dates';
+import { mediaSrc, withBase } from '../../lib/paths';
+import { embedUrl } from '../../lib/video';
+
+export async function getStaticPaths() {
+	const posts = await publishedPosts();
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const cover = mediaSrc(post.data.cover);
+const photos = post.data.photos
+	.map((photo) => mediaSrc(photo))
+	.filter((src): src is string => Boolean(src));
+const video = post.data.videoUrl ? embedUrl(post.data.videoUrl) : undefined;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+	<p><a href={withBase('archive/')}>← All entries</a></p>
+	<article class="prose">
+		<p class="entry-meta">
+			<time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+		</p>
+		<h1 class="entry-title">{post.data.title}</h1>
+		{
+			post.data.tags.length > 0 && (
+				<ul class="tags">
+					{post.data.tags.map((tag) => (
+						<li>
+							<a class="tag" href={withBase(`tags/${tagSlug(tag)}/`)}>
+								{tag}
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+		{cover && <img class="cover-image" src={cover} alt={post.data.coverAlt} />}
+		<Content />
+		{
+			photos.length > 0 && (
+				<div class="gallery">
+					{photos.map((src) => (
+						<img src={src} alt="" />
+					))}
+				</div>
+			)
+		}
+		{
+			video && (
+				<div class="video-frame">
+					<iframe
+						loading="lazy"
+						src={video}
+						title={`Video for ${post.data.title}`}
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen
+					/>
+				</div>
+			)
+		}
+	</article>
+</BaseLayout>

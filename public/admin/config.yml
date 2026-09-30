@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: SatishTA/MentalHealthBlog
+  branch: main
+  auth_methods: [token]
+
+media_folder: public/uploads
+public_folder: /uploads
+
+site_url: https://SatishTA.github.io/MentalHealthBlog/
+display_url: https://SatishTA.github.io/MentalHealthBlog/
+logo_url: /MentalHealthBlog/favicon.svg
+
+collections:
+  - name: posts
+    label: Journal entries
+    label_singular: Entry
+    folder: src/content/posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - { label: Draft, name: draft, widget: boolean, default: true, hint: "Turn off to include this entry on the public website." }
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Summary, name: description, widget: text }
+      - { label: Tags, name: tags, widget: list, default: [] }
+      - { label: Cover photo, name: cover, widget: image, required: false }
+      - { label: Cover description, name: coverAlt, widget: string, required: false, hint: Describe the photo for readers using a screen reader. }
+      - label: Photos
+        name: photos
+        widget: list
+        required: false
+        field: { label: Photo, name: image, widget: image }
+      - label: Video URL
+        name: videoUrl
+        widget: string
+        required: false
+        hint: Paste a public YouTube or Vimeo link.
+      - { label: Entry, name: body, widget: markdown }

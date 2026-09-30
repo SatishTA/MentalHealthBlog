@@ -1,0 +1,30 @@
+---
+import { publishedPosts } from '../lib/posts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths';
+import PostCard from '../components/PostCard.astro';
+const posts = await publishedPosts();
+const latest = posts.slice(0, 6);
+---
+
+<BaseLayout>
+	<section class="hero">
+		<h1>A quiet harbor for daily thoughts.</h1>
+		<p class="lede">
+			Words, photos, and short videos — posted when there is something worth setting down.
+		</p>
+	</section>
+
+	{
+		latest.length === 0 ? (
+			<p class="empty">No entries yet. Open the admin page to write the first one.</p>
+		) : (
+			<section class="entry-list" aria-label="Latest entries">
+				{latest.map((post) => (
+					<PostCard post={post} />
+				))}
+			</section>
+		)
+	}
+<p class="browse-link"><a href={withBase('archive/')}>Browse all entries →</a></p>
+</BaseLayout>

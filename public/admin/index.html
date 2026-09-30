@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Write · Stillharbor</title>
+		<link href="./config.yml" type="application/yaml" rel="cms-config-url" />
+	</head>
+	<body>
+		<p id="loading" role="status">Loading the editor… If it does not load, check your connection and reload this page.</p>
+		<noscript>Enable JavaScript to use the editor.</noscript>
+		<script>
+			window.CMS_MANUAL_INIT = true;
+		</script>
+		<script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+		<script>
+			const host = window.location.hostname;
+			const pathParts = window.location.pathname.split("/").filter(Boolean);
+			let repo = "SatishTA/MentalHealthBlog";
+
+			if (host.endsWith(".github.io")) {
+				const owner = host.split(".")[0];
+				const project = pathParts[0] && pathParts[0] !== "admin" ? pathParts[0] : `${owner}.github.io`;
+				repo = `${owner}/${project}`;
+			}
+
+			if (window.CMS) document.getElementById("loading").hidden = true;
+			CMS.init({
+				config: {
+					load_config_file: true,
+					backend: {
+						name: "github",
+						repo,
+						branch: "main",
+						auth_methods: ["token"],
+					},
+				},
+			});
+		</script>
+	</body>
+</html>

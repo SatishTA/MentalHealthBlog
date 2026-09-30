@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteName } from '../lib/site';
+---
+
+<BaseLayout title="About" description={`What ${siteName} is, and how new entries are published.`}>
+	<article class="prose">
+		<h1 class="page-title">About</h1>
+		<p>
+			{siteName} is a personal mental-health journal: a place to set down daily thoughts, photos,
+			and short videos without turning them into a performance.
+		</p>
+		<p>
+			New entries are written in the site admin, saved to GitHub, and published on GitHub Pages.
+			Photos live in the repository. Videos are linked from YouTube or Vimeo so the free host stays
+			light.
+		</p>
+		<p>
+			If you are visiting because something feels heavy, you are welcome here — and you deserve
+			support that this page cannot provide. Use the resources in the footer if you need them.
+		</p>
+	</article>
+</BaseLayout>
