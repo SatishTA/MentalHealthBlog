@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: Circular Labyrinth – Visual Focus Exercise
 date: 2026-09-30T14:00:00
 description: |-

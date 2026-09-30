@@ -9,7 +9,7 @@ interface Props {
 
 const { post } = Astro.props;
 const href = withBase(`posts/${post.id}/`);
-const cover = mediaSrc(post.data.cover ?? post.data.photos[0]);
+const cover = mediaSrc(post.data.cover?.trim() || post.data.photos[0]);
 ---
 
 <a class:list={["card", { "card-text-only": !cover }]} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(" ")} ${post.body ?? ""}`.toLowerCase()} href={href}>
