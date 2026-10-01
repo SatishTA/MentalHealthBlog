@@ -45,6 +45,7 @@ const video = post.data.videoUrl ? embedUrl(post.data.videoUrl) : undefined;
 			)
 		}
 		{cover && <img class="cover-image" src={cover} alt={post.data.coverAlt} />}
+		{post.data.type === 'photo' && <p class="photo-caption">{post.data.description}</p>}
 		<Content />
 		{
 			photos.length > 0 && (

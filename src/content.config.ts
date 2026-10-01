@@ -12,6 +12,7 @@ const photoField = z.union([
 const posts = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
 	schema: z.object({
+		type: z.enum(['blog', 'photo']).default('blog'),
 		title: z.string().trim().min(1),
 		draft: z.boolean().default(false),
 		coverAlt: z.string().default(''),

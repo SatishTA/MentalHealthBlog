@@ -8,36 +8,60 @@ backend:
 
 media_folder: public/uploads
 public_folder: /uploads
-
 site_url: https://SatishTA.github.io/MentalHealthBlog/
 display_url: https://SatishTA.github.io/MentalHealthBlog/
 logo_url: /MentalHealthBlog/favicon.svg
 
 collections:
-  - name: posts
-    label: Journal entries
-    label_singular: Entry
+  - name: photos
+    label: Photo posts
+    label_singular: Photo post
+    description: Upload a photo, add a caption, and share a moment.
     folder: src/content/posts
+    filter: { field: type, value: photo }
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-photo-{{slug}}"
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - { name: type, widget: hidden, default: photo }
+      - { label: Main photo, name: cover, widget: image, hint: Choose a photo from your phone or computer. This also appears on the homepage. }
+      - { label: Photo description, name: coverAlt, widget: string, hint: Briefly describe what is in the photo for readers using a screen reader. }
+      - { label: Title, name: title, widget: string }
+      - { label: Caption, name: description, widget: text, hint: A short thought to accompany your photo. }
+      - label: More photos
+        name: photos
+        widget: list
+        required: false
+        field: { label: Photo, name: image, widget: image }
+      - { label: More thoughts, name: body, widget: markdown, required: false, hint: Optional space for the story behind your photos. }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Tags, name: tags, widget: list, default: [], required: false }
+      - { label: Keep as draft, name: draft, widget: boolean, default: true, hint: "ON: hidden from the website. OFF: appears on the website after you save and deployment finishes. Saved files are visible in the public GitHub repository." }
+
+  - name: posts
+    label: Written blogs
+    label_singular: Written blog
+    description: Write your thoughts, with optional photos and a video link. Existing journal entries are here too.
+    folder: src/content/posts
+    filter: { field: type, value: [blog, null] }
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: md
     format: yaml-frontmatter
     fields:
-      - { label: Draft, name: draft, widget: boolean, default: true, hint: "Turn off to include this entry on the public website." }
+      - { name: type, widget: hidden, default: blog }
       - { label: Title, name: title, widget: string }
-      - { label: Date, name: date, widget: datetime }
-      - { label: Summary, name: description, widget: text }
-      - { label: Tags, name: tags, widget: list, default: [] }
+      - { label: Summary, name: description, widget: text, hint: A short introduction shown on the homepage. }
+      - { label: Your thoughts, name: body, widget: markdown }
       - { label: Cover photo, name: cover, widget: image, required: false }
       - { label: Cover description, name: coverAlt, widget: string, required: false, hint: Describe the photo for readers using a screen reader. }
-      - label: Photos
+      - label: More photos
         name: photos
         widget: list
         required: false
         field: { label: Photo, name: image, widget: image }
-      - label: Video URL
-        name: videoUrl
-        widget: string
-        required: false
-        hint: Paste a public YouTube or Vimeo link.
-      - { label: Entry, name: body, widget: markdown }
+      - { label: Video URL, name: videoUrl, widget: string, required: false, hint: Paste a public YouTube or Vimeo link. }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Tags, name: tags, widget: list, default: [], required: false }
+      - { label: Keep as draft, name: draft, widget: boolean, default: true, hint: "ON: hidden from the website. OFF: appears on the website after you save and deployment finishes. Saved files are visible in the public GitHub repository." }

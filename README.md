@@ -27,8 +27,8 @@ Open `http://localhost:4321/MentalHealthBlog/` (the project `base` path matches 
 1. Create a [fine-grained personal access token](https://github.com/settings/tokens?type=beta) with **Contents: Read and write** on this repository (or a classic token with the `repo` / `public_repo` scope).
 2. Open `https://<you>.github.io/MentalHealthBlog/admin/` and choose **Sign in with token**.
 3. Paste the token. It stays in your browser’s local storage, not in the repo.
-4. Add an entry: title, date, summary, tags, cover/photos, optional YouTube or Vimeo URL, and the body.
-5. New entries start as drafts. Turn **Draft** off, then save/publish. GitHub Actions rebuilds the site in a minute or two.
+4. Choose **Photo posts** for a main photo, caption, optional gallery, and extra thoughts. Choose **Written blogs** for a title, summary, and full article with optional media. Existing journal entries are listed under Written blogs.
+5. New entries start as drafts. Turn **Keep as draft** off, then save/publish. GitHub Actions rebuilds the site in a minute or two.
 
 Photos upload to `public/uploads`. GitHub files cannot exceed 100MB; keep the repo small. Prefer video **links** over large uploads.
 
